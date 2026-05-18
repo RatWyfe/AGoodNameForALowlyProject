@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using RataTat;
 
 namespace CarlasTextFileToolUwU
 {
@@ -32,30 +33,25 @@ namespace CarlasTextFileToolUwU
         }
         internal int Fileindexfind(string[] filecontents, int index)
         {
-            char[] split = { '-', '1' };
+            char[] split;
             for (int i = 0; i < filecontents.Length; i++)
             {
-                // read files
                 if (filecontents[i].StartsWith("-"))
                 {
-                    if (filecontents[i].Length > 1)
+                    StringManipulation Counter = new StringManipulation();
+                    split = (Counter.Substring(filecontents[i], 1, filecontents[i].Length - 1).ToCharArray());
+                    if (Convert.ToInt32(split) == index)
                     {
-                        split = new char[filecontents[i].Length - 1];
-                    }
-                    // looks for -
-                    // splits into character array
-                    for (int j = 0; j + 1 < filecontents[j].Length; j++)
-                    {   // now we just ignore the first character aka the "-" and looking whats after it
-                        split[j] = Convert.ToChar(filecontents[j + 1]);
+                        return (i);
                     }
                 }
             }
-            return Convert.ToInt32(Convert.ToString(split));
+            return -1;
         }
     }
     public class FileWriter
     {
-        public void FileWrite(string filename, string[] content)
+        internal void FileWrite(string filename, string[] content)
         {
             File.WriteAllLines(filename, content);
         }
@@ -71,8 +67,26 @@ namespace CarlasTextFileToolUwU
             {
                 if (check == true)
                 {
-
+                    FileTools TemporaryObject2 = new FileTools();
+                    int position = TemporaryObject2.Fileindexfind(filecontents, index);
+                    if (position != -1)
+                    {
+                        StreamReader reader = new StreamReader(filename);
+                        string reWrite;
+                        for (int i = 0; i < position + 4; i++)
+                        {
+                            reWrite = reader.ReadLine();
+                            if (i >= position)
+                            {
+                                foundindex[i - position] = reWrite;
+                            }
+                        }
+                    }
                     return foundindex;
+                }
+                else
+                {
+                    File.Create(filename).Close();
                 }
             }
             return foundindex;

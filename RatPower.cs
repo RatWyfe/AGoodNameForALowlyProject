@@ -5,19 +5,22 @@ namespace RataTat
 {
     public class StringManipulation
     {
-        public string Substring(string input, byte begin, byte length)// this is supposed to be in the newer versions so I might aswell make myself
+        public string Substring(string input, int begin, int length)
         {
-            
-            if (begin < 0)
+            // st/ring- 6 length 5 begin 2
+            if (input.Length - begin - length < 0)
             {
-                throw new ArgumentException("End index must be greater than or equal to begin index.");
+                throw new IndexOutOfRangeException();
             }
-            char[] converthold = new char[length];
-            for (int i = 0; i < input.Length; i++)
+            else
             {
-                
+                char[] converthold = new char[length];
+                for (int i = 0; i < length; i++)
+                { // String "string" 0 then start at s if 1 start at t
+                    converthold[i] = input[begin + i];
+                }
+                return new string(converthold);
             }
-            return "";
         }
     }
     public class ConversionValidation
